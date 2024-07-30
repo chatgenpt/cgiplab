@@ -1,51 +1,27 @@
 import cv2
-import matplotlib.pyplot as plt
 
-# Function to split an image into 4 quadrants
-def split_image_into_quadrants(image):
-    # Get image dimensions
-    height, width, channels = image.shape
+# Load the image
+image = cv2.imread('aura1.png')
 
-    # Calculate midpoints
-    mid_x = width // 2
-    mid_y = height // 2
+# Get the dimensions of the image
+height, width, channels = image.shape
 
-    # Split image into quadrants
-    top_left = image[:mid_y, :mid_x]
-    top_right = image[:mid_y, mid_x:]
-    bottom_left = image[mid_y:, :mid_x]
-    bottom_right = image[mid_y:, mid_x:]
+# Calculate the center of the image
+center_y = height // 2
+center_x = width // 2
 
-    return top_left, top_right, bottom_left, bottom_right
+# Split the image into four quadrants
+top_left = image[0:center_y, 0:center_x]
+top_right = image[0:center_y, center_x:width]
+bottom_left = image[center_y:height, 0:center_x]
+bottom_right = image[center_y:height, center_x:width]
 
-# Read the image
-image_path = 'image.jpg'  # Replace with your image path
-image = cv2.imread(image_path)
+# Display each quadrant
+cv2.imshow('Top Left', top_left)
+cv2.imshow('Top Right', top_right)
+cv2.imshow('Bottom Left', bottom_left)
+cv2.imshow('Bottom Right', bottom_right)
 
-if image is None:
-    print(f"Error: Unable to read image at '{image_path}'")
-else:
-    # Split image into quadrants
-    quadrants = split_image_into_quadrants(image)
-
-    # Display each quadrant using matplotlib
-    fig, axs = plt.subplots(2, 2, figsize=(10, 10))
-
-    axs[0, 0].imshow(cv2.cvtColor(quadrants[0], cv2.COLOR_BGR2RGB))
-    axs[0, 0].set_title('Top Left Quadrant')
-    axs[0, 0].axis('off')
-
-    axs[0, 1].imshow(cv2.cvtColor(quadrants[1], cv2.COLOR_BGR2RGB))
-    axs[0, 1].set_title('Top Right Quadrant')
-    axs[0, 1].axis('off')
-
-    axs[1, 0].imshow(cv2.cvtColor(quadrants[2], cv2.COLOR_BGR2RGB))
-    axs[1, 0].set_title('Bottom Left Quadrant')
-    axs[1, 0].axis('off')
-
-    axs[1, 1].imshow(cv2.cvtColor(quadrants[3], cv2.COLOR_BGR2RGB))
-    axs[1, 1].set_title('Bottom Right Quadrant')
-    axs[1, 1].axis('off')
-
-    plt.tight_layout()
-    plt.show()
+# Wait for a key press and close the windows
+cv2.waitKey(0)
+cv2.destroyAllWindows()
